@@ -1,14 +1,28 @@
 import { Component } from "react";
 import "./NavbarStyles.css";
+import React,{useState} from "react";
 import {Link} from "react-router-dom";
-import {MenuItems} from "./MenuItems" 
+import {MenuItems} from "./MenuItems" ;
+  
 class Navbar extends Component{
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      isclick:false
+    }
+}
+  signout=()=>{
+    console.log('hello')
+  };
 
     state = {clicked:false};
     state = { clicked: false };
+    
   handleClick = () => {
     this.setState({ clicked: !this.state.clicked });
   };
+
   
     render(){
         return(
@@ -37,7 +51,8 @@ class Navbar extends Component{
                      </li>
                       );
                     })}
-                    <button>Sign Up</button>
+                 {this.state.isclick ?  <Link to="/sign"> <button>Sign Up</button></Link>:
+                   <Link to="/"> <button onClick={this.state.signout}>logout</button></Link>}
                     
                 </ul>
             </nav>
