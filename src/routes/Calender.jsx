@@ -1,15 +1,22 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useNavigate } from 'react-router-dom';
 import "./Consult.css"
 
 // import React from 'react'
 
 const Calender = () => {
+  const navigate =useNavigate()
   
-  
+  const home=()=>{
+    navigate('/')
+  }
+
     const [value, onChange] = useState(new Date());
-  
+
+
+
   return (
 <section className='consultsec'>
 <div className="innerconsult">
@@ -42,7 +49,7 @@ const Calender = () => {
 
    </div>
    <div className="mobnavdw">
-  <span className='mobnav01'>Back</span>
+  <span onClick={home} className='mobnav01'>Back</span>
   <button className='mobnav02'>
     Book now
   </button>
@@ -59,11 +66,11 @@ const Calender = () => {
     <Calendar  onChange={onChange} value={value} />
 
 <div className="bitdiv">
-<a href="/doctor">
-<button className='back'>
+
+<button onClick={home} className='back'>
 Back
 </button>
-</a>
+
 
 <a href="/confirm-pay">
 <button className='book'>

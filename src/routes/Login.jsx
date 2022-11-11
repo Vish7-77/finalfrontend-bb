@@ -1,11 +1,33 @@
 import React,{useState} from 'react'
-import  {Link} from "react-router-dom"
+import  {Link, useNavigate} from "react-router-dom"
+import { useDispatch } from 'react-redux'
+
+
+
+
 const Signup = () => {
-    
+//use navigate to naviagte the page after logging in
+const navigate = useNavigate();
+
+//useDispatch for dispatching the variable in redux
+const dispatch = useDispatch();
+
+
+
     const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 
 	async function loginUser(event) {
+
+
+		event.preventDefault()
+        
+if(localStorage.token){
+    
+    alert("user is already  loged in")
+}
+
+
 		event.preventDefault()
 
 		const response = await fetch('http://localhost:8800/api/login', {
@@ -20,13 +42,19 @@ const Signup = () => {
 		})
 
 		const data = await response.json()
+    
 
 		if (data.user) {
+
 			localStorage.setItem('token', data.user)
+            console.log(data)
 			alert('Login successful')
-			window.location.href = '/'
-		} else {
-			alert('Please check your username and password')
+           navigate('/')
+            dispatch({type:'loginUser'})
+
+		}
+         else {
+			return alert('Please check your username and password')
 		}
 	}
   return (

@@ -30,7 +30,8 @@ const Sign = () => {
 
 		if (data.status === 'ok') {
       alert("ello")
-      navigate('/sign');
+      navigate('/cal');
+    
 		}
 	}
 
