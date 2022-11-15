@@ -12,7 +12,7 @@ const Sign = () => {
 
 		event.preventDefault()
 
-		const response = await fetch('http://localhost:8800/api/register', {
+		const response = await fetch('http://localhost:8800/api/v1/register', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',

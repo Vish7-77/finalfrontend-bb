@@ -1,97 +1,93 @@
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import { useNavigate } from 'react-router-dom';
+import * as React from 'react';
+
+import dayjs from 'dayjs';
 import "./Consult.css"
+import { StyledEngineProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import axios from 'axios';
 
-// import React from 'react'
 
-const Calender = () => {
-  const navigate =useNavigate()
-  
-  const home=()=>{
-    navigate('/')
+
+
+
+export default function BasicDateTimePicker() {
+
+  //function to convert the timings
+  const myfunc = (_id, time) => {
+    let ddy = _id.time
+    var s = new Date(ddy).toLocaleString(undefined, { timeZone: 'Asia/Kolkata' })
+    console.log(s)
+
+    return <li className='list' key={_id}> {s} </li>
   }
 
-    const [value, onChange] = useState(new Date());
+
+
+  //all the managed state for reservation
+  const [value, setValue] = React.useState(dayjs('2022-04-07'));
+  const [showres, setshowres] = React.useState([])
+
+
+
+
+  //posting the API
+  const HandlePush = () => {
+    const val = { "time": value };
+    axios.post(`http://localhost:8800/api/v1/reservation`, val).then((res) => { console.log(res) })
+
+    alert("booking successfully allotted")
+  }
+
+
+
+
+//Fetching the API on REload of the Page
+  React.useEffect(() => {
+    axios.get(`http://localhost:8800/api/v1/reservation`)
+      .then(res => {
+
+        setshowres(res.data.Reseravtions);
+
+
+      })
+  }, [])
+
+
 
 
 
   return (
-<section className='consultsec'>
-<div className="innerconsult">
-    
+    <>
 
-    <div className="conleft">
-   <div className="inconleft">
-   <span className="slot">
- Slot Available On Today
- </span>
- <span className='gryline'></span>
-<div className="timings">
-<div className="topt">
-    <button>9:00 AM</button>
-    <button>9:30 AM</button>
-    <button>10:00 AM</button>
-</div>
-<div className="bottomt">
+      <div className="cont">
+        <StyledEngineProvider injectFirst>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker
+              renderInput={(props) => <TextField {...props} />}
+              label="DateTimePicker"
+              value={value}
+              onChange={(newValue) => {
+                setValue(newValue);
 
-<button>9:00 AM</button>
-    <button>9:30 AM</button>
-    <button>10:00 AM</button>
+              }}
+            />
 
-</div>
+            <button onClick={HandlePush}>Submit </button>
+          </LocalizationProvider>
+        </StyledEngineProvider>
 
 
+        <div className="sideconst">
+Slots Booked
+
+          <ul>{showres.map(myfunc)}</ul>
 
 
-</div>
-
-   </div>
-   <div className="mobnavdw">
-  <span onClick={home} className='mobnav01'>Back</span>
-  <button className='mobnav02'>
-    Book now
-  </button>
-   </div>
-
-        
-    </div>
-
-
-
-    <div className="conright">
-
-
-    <Calendar  onChange={onChange} value={value} />
-
-<div className="bitdiv">
-
-<button onClick={home} className='back'>
-Back
-</button>
-
-
-<a href="/confirm-pay">
-<button className='book'>
-Book now
-</button>
-</a>
-</div>
-
-    </div>
-    
-    
-    
-    
-    </div>    
-
-
-
-
-
-</section>
-  )
+        </div>
+      </div>
+    </>
+  );
 }
-
-export default Calender
